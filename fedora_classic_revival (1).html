@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fedora - Classic Revival</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        robloxBlue: '#0074bd',
+                        robloxHeaderBlue: '#0084dd',
+                        robloxBg: '#e3e3e3',
+                        robloxDarkText: '#393b3d',
+                        robloxBtnBlue: '#00a2ff',
+                        robloxBtnGreen: '#00b259'
+                    },
+                    fontFamily: {
+                        sans: ['"Source Sans Pro"', 'Arial', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #e3e3e3;
+            color: #393b3d;
+            font-family: 'Source Sans Pro', Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .fedora-logo-svg {
+            height: 32px;
+            width: auto;
+            filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.3));
+            transition: transform 0.15s ease;
+        }
+        .fedora-logo-svg:hover {
+            transform: scale(1.03);
+        }
+
+        .currency-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 6px;
+            background: rgba(0, 0, 0, 0.18);
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .currency-badge:hover {
+            background: rgba(0, 0, 0, 0.32);
+        }
+
+        .icon-robux {
+            width: 14px;
+            height: 14px;
+            background: #2ecc71;
+            border: 1.5px solid #27ae60;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 8px;
+            font-weight: 900;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .icon-tix {
+            width: 14px;
+            height: 14px;
+            background: #e74c3c;
+            border: 1.5px solid #c0392b;
+            border-radius: 2px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 8px;
+            font-weight: 900;
+            transform: rotate(45deg);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .icon-tix span {
+            transform: rotate(-45deg);
+        }
+
+        .roblox-card-shadow {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        }
+
+        .see-all-btn {
+            background-color: #00a2ff;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 3px 12px;
+            border-radius: 2px;
+            transition: background-color 0.15s ease;
+        }
+        .see-all-btn:hover {
+            background-color: #0082cc;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 7px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #393b3d;
+            border-radius: 3px;
+            transition: background 0.10s;
+            cursor: pointer;
+        }
+        .sidebar-item:hover {
+            background-color: #d6d6d6;
+        }
+        .sidebar-item.active {
+            background-color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .sidebar-icon {
+            width: 22px;
+            text-align: center;
+            margin-right: 8px;
+            color: #656768;
+            font-size: 14px;
+        }
+
+        #custom-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Toast notification animations */
+        @keyframes slideIn {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-100%); opacity: 0; }
+        }
+        .toast-enter {
+            animation: slideIn 0.3s forwards ease-out;
+        }
+        .toast-exit {
+            animation: slideOut 0.3s forwards ease-in;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #d6d6d6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a0a0a0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-blue-200">
+
+    <div id="toast-container" class="fixed top-12 right-4 z-[1000] flex flex-col gap-2 pointer-events-none max-w-sm w-full"></div>
+
+    <div id="custom-modal">
+        <div class="bg-white rounded p-4 max-w-sm w-full mx-4 roblox-card-shadow text-center">
+            <h3 id="modal-title" class="font-bold text-base text-gray-800 mb-2">Fedora Notice</h3>
+            <p id="modal-message" class="text-xs text-gray-600 mb-4 whitespace-pre-line"></p>
+            <button onclick="closeModal()" class="px-4 py-1.5 bg-blue-600 text-white font-bold text-xs rounded hover:bg-blue-700 transition">OK</button>
+        </div>
+    </div>
+
+    <header class="bg-[#0074bd] text-white sticky top-0 z-50 h-11 shadow-md">
+        <div class="max-w-[1170px] mx-auto px-2 h-full flex items-center justify-between">
+            
+            <div class="flex items-center space-x-4">
+                <a href="#" onclick="switchTab('home')" class="flex items-center" title="Fedora Classic Revival">
+                    <svg class="fedora-logo-svg" viewBox="0 0 380 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g stroke="#d00" stroke-width="7" stroke-linejoin="miter" stroke-miterlimit="3">
+                            <path d="M 62 8 L 112 8 L 110 17 L 60 17 Z" fill="#ffffff" stroke="#d00" stroke-width="5" />
+                            <path d="M 12 80 L 8 20 L 52 14 L 54 32 L 28 34 L 29 46 L 48 44 L 46 60 L 29 62 L 31 80 Z" fill="#ffffff"/>
+                            <polygon points="17,25 21,25 21,31 17,31" fill="#ffffff" />
+                            <path d="M 52 82 L 56 21 L 102 20 L 100 37 L 76 38 L 77 48 L 96 48 L 94 63 L 78 64 L 79 73 L 104 71 L 102 85 Z" fill="#ffffff"/>
+                            <path d="M 100 84 L 105 21 L 140 18 C 158 18 163 28 161 48 C 159 68 150 83 130 84 Z" fill="#ffffff"/>
+                            <path d="M 122 36 L 121 68 L 131 67 C 141 67 144 57 145 47 C 146 38 142 36 133 36 Z" fill="#d00" stroke="none"/>
+                            <path d="M 160 52 C 158 28 171 16 195 16 C 219 16 226 31 224 54 C 222 76 208 86 185 86 C 163 86 162 72 160 52 Z" fill="#ffffff"/>
+                            <path d="M 180 52 C 181 38 186 31 193 31 C 200 31 204 38 203 52 C 202 65 197 71 190 71 C 183 71 180 64 180 52 Z" fill="#d00" stroke="none"/>
+                            <path d="M 220 86 L 225 22 L 262 20 C 276 20 282 28 280 42 C 278 52 271 58 261 60 L 275 86 L 253 86 L 242 63 L 242 86 Z" fill="#ffffff"/>
+                            <path d="M 242 34 L 242 49 L 256 48 C 262 48 264 45 265 41 C 266 37 263 34 257 34 Z" fill="#d00" stroke="none"/>
+                            <path d="M 270 86 L 298 21 L 332 20 L 352 86 L 331 86 L 325 68 L 296 70 L 292 86 Z" fill="#ffffff"/>
+                            <polygon points="302,52 321,50 312,30" fill="#d00" stroke="none"/>
+                        </g>
+                    </svg>
+                </a>
+
+                <nav class="hidden md:flex items-center text-sm font-semibold pl-2">
+                    <button onclick="switchTab('home')" id="nav-home" class="px-3 py-2 bg-black/15 text-white transition">Home</button>
+                    <button onclick="switchTab('games')" id="nav-games" class="px-3 py-2 hover:bg-black/15 text-white/90 hover:text-white transition">Games</button>
+                    <button onclick="switchTab('catalog')" id="nav-catalog" class="px-3 py-2 hover:bg-black/15 text-white/90 hover:text-white transition">Catalog</button>
+                    <button onclick="switchTab('develop')" id="nav-develop" class="px-3 py-2 hover:bg-black/15 text-white/90 hover:text-white transition">Develop</button>
+                </nav>
+            </div>
+
+            <div class="flex-1 max-w-sm mx-4 hidden sm:block">
+                <div class="relative">
+                    <input type="text" placeholder="Search catalog, players, games" class="w-full bg-white text-gray-800 text-xs py-1.5 px-2.5 pr-8 rounded-none border-0 focus:outline-none focus:ring-1 focus:ring-blue-300 placeholder-gray-400">
+                    <i class="fa-solid fa-magnifying-glass absolute right-2.5 top-2 text-gray-400 text-xs"></i>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2 text-xs font-semibold">
+                <!-- Dual Currency Badge -->
+                <div class="currency-badge" onclick="claimDailyTix()" title="Click to claim Daily Tix Allowance!">
+                    <div class="icon-robux">R</div>
+                    <span id="user-robux" class="font-bold">5,000</span>
+                </div>
+
+                <div class="currency-badge" onclick="claimDailyTix()" title="Click to claim Daily Tix Allowance!">
+                    <div class="icon-tix"><span>T</span></div>
+                    <span id="user-tix" class="font-bold">10,000</span>
+                </div>
+
+                <button onclick="showToast('Friend Request', 'Builderman sent you a friend request!', 'info')" class="p-1 hover:bg-black/20 rounded transition relative" title="Notifications">
+                    <i class="fa-solid fa-user-group text-xs"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold">1</span>
+                </button>
+
+                <div class="border-l border-white/30 pl-2 flex items-center space-x-1.5 cursor-pointer" onclick="switchTab('profile')">
+                    <div class="w-5 h-5 rounded-full bg-black/20 flex items-center justify-center text-[10px]">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <span id="header-username" class="font-bold text-xs truncate max-w-[85px]">Guest 0000</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-[1170px] mx-auto w-full flex-1 flex my-3 px-2 gap-3">
+        
+        <aside class="w-44 flex-shrink-0 hidden md:block">
+            <div class="space-y-0.5 font-sans">
+                <div class="flex items-center space-x-2 p-2 mb-2 bg-white rounded-sm roblox-card-shadow cursor-pointer" onclick="switchTab('profile')">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 border border-gray-300 flex items-center justify-center text-gray-700 text-sm">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="truncate">
+                        <div id="sidebar-username" class="text-xs font-bold text-gray-800 truncate">Guest 0000</div>
+                        <div class="text-[10px] text-green-600 font-semibold flex items-center"><span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1"></span> Online</div>
+                    </div>
+                </div>
+
+                <div class="sidebar-item active" id="sb-home" onclick="switchTab('home')">
+                    <i class="fa-solid fa-house sidebar-icon"></i>
+                    <span>Home</span>
+                </div>
+
+                <div class="sidebar-item" id="sb-games" onclick="switchTab('games')">
+                    <i class="fa-solid fa-gamepad sidebar-icon"></i>
+                    <span>Games</span>
+                </div>
+
+                <div class="sidebar-item" id="sb-catalog" onclick="switchTab('catalog')">
+                    <i class="fa-solid fa-store sidebar-icon text-green-600"></i>
+                    <span class="text-green-800 font-bold">Catalog Store</span>
+                </div>
+
+                <div class="sidebar-item" id="sb-inventory" onclick="switchTab('inventory')">
+                    <i class="fa-solid fa-box-open sidebar-icon text-amber-600"></i>
+                    <span class="font-bold">Live Inventory</span>
+                </div>
+
+                <div class="sidebar-item" id="sb-trade" onclick="switchTab('trade')">
+                    <i class="fa-solid fa-arrow-right-arrow-left sidebar-icon text-blue-600"></i>
+                    <span class="font-bold">Trade System</span>
+                </div>
+
+                <div class="sidebar-item" id="sb-profile" onclick="switchTab('profile')">
+                    <i class="fa-solid fa-id-card sidebar-icon"></i>
+                    <span>Profile</span>
+                </div>
+
+                <div class="sidebar-item" id="sb-groups" onclick="switchTab('groups')">
+                    <i class="fa-solid fa-users sidebar-icon"></i>
+                    <span>Groups</span>
+                </div>
+
+                <div class="sidebar-item" id="sb-buildersclub" onclick="switchTab('buildersclub')">
+                    <i class="fa-solid fa-shield-halved sidebar-icon text-amber-600"></i>
+                    <span class="text-amber-800 font-bold">Builders Club</span>
+                </div>
+
+                <div class="sidebar-item" id="sb-develop" onclick="switchTab('develop')">
+                    <i class="fa-solid fa-code sidebar-icon text-blue-600"></i>
+                    <span class="text-blue-800 font-bold">Develop</span>
+                </div>
+
+                <div class="border-t border-gray-300 my-2 pt-2"></div>
+
+                <div class="p-2 bg-white rounded-sm roblox-card-shadow text-[11px] text-gray-600 border-l-2 border-green-500 space-y-1">
+                    <div class="font-bold text-gray-800 flex items-center justify-between">
+                        <span>Global Storage</span>
+                        <span id="firebase-status" class="w-2 h-2 rounded-full bg-amber-400" title="Connecting..."></span>
+                    </div>
+                    <p class="leading-tight">Real-time games & trades synchronized via Firestore.</p>
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-hidden min-w-0">
+
+            <section id="page-home" class="space-y-3">
+                <div class="bg-white px-4 py-3 rounded-sm roblox-card-shadow flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-gray-800 tracking-tight">Hello, <span id="home-greeting-username">Guest 0000</span>!</h1>
+                    <button onclick="claimDailyTix()" class="bg-red-500 hover:bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded transition shadow flex items-center gap-1">
+                        <div class="icon-tix"><span>T</span></div> Claim Daily Tix (+250)
+                    </button>
+                </div>
+
+                <div class="bg-white p-3 rounded-sm roblox-card-shadow">
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-base font-bold text-gray-800">Friends (199)</h2>
+                        <button class="see-all-btn">See All</button>
+                    </div>
+                    <div class="flex space-x-3 overflow-x-auto pb-1">
+                        <div class="flex-shrink-0 text-center w-16 cursor-pointer" onclick="openTradeWithNPC('Builderman')">
+                            <div class="w-14 h-14 mx-auto rounded-full bg-blue-100 border border-green-500 p-0.5 relative">
+                                <img src="https://placehold.co/100x100/0074bd/ffffff?text=Builderman" class="rounded-full w-full h-full object-cover">
+                                <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border border-white rounded-full"></span>
+                            </div>
+                            <span class="text-[11px] mt-1 block font-semibold truncate text-gray-700">Builderman</span>
+                            <span class="text-[9px] text-blue-600 font-bold hover:underline">Trade</span>
+                        </div>
+                        <div class="flex-shrink-0 text-center w-16 cursor-pointer" onclick="openTradeWithNPC('Telamon')">
+                            <div class="w-14 h-14 mx-auto rounded-full bg-purple-100 border border-green-500 p-0.5 relative">
+                                <img src="https://placehold.co/100x100/8e44ad/ffffff?text=Telamon" class="rounded-full w-full h-full object-cover">
+                                <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border border-white rounded-full"></span>
+                            </div>
+                            <span class="text-[11px] mt-1 block font-semibold truncate text-gray-700">Telamon</span>
+                            <span class="text-[9px] text-blue-600 font-bold hover:underline">Trade</span>
+                        </div>
+                        <div class="flex-shrink-0 text-center w-16 cursor-pointer" onclick="openTradeWithNPC('Stickmasterluke')">
+                            <div class="w-14 h-14 mx-auto rounded-full bg-amber-100 border border-green-500 p-0.5 relative">
+                                <img src="https://placehold.co/100x100/f39c12/ffffff?text=Stickmaster" class="rounded-full w-full h-full object-cover">
+                                <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border border-white rounded-full"></span>
+                            </div>
+                            <span class="text-[11px] mt-1 block font-semibold truncate text-gray-700">Stickmaster</span>
+                            <span class="text-[9px] text-blue-600 font-bold hover:underline">Trade</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-3 rounded-sm roblox-card-shadow">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-base font-bold text-gray-800">Featured Games</h2>
+                        <button onclick="switchTab('games')" class="see-all-btn">See All</button>
+                    </div>
+                    <div id="recently-played-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+                </div>
+
+                <div class="bg-white p-3 rounded-sm roblox-card-shadow">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-base font-bold text-gray-800">Community Uploads</h2>
+                        <button onclick="switchTab('develop')" class="see-all-btn bg-green-600 hover:bg-green-700"><i class="fa-solid fa-plus mr-1"></i> Upload</button>
+                    </div>
+                    <div id="community-games-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+                </div>
+            </section>
+
+            <section id="page-games" class="space-y-3 hidden">
+                <div class="bg-white p-4 rounded-sm roblox-card-shadow space-y-4">
+                    <div class="border-b pb-2 flex justify-between items-center">
+                        <h1 class="text-xl font-bold text-gray-800">Games Directory</h1>
+                        <button onclick="switchTab('develop')" class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white font-bold text-xs rounded shadow">Publish HTML Game</button>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-sm text-gray-700 mb-2">Featured Experiences</h2>
+                        <div id="featured-games-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+                    </div>
+                    <div class="pt-2 border-t">
+                        <h2 class="font-bold text-sm text-gray-700 mb-2">Global Community Uploads</h2>
+                        <div id="all-community-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-catalog" class="space-y-3 hidden">
+                <div class="bg-white p-4 rounded-sm roblox-card-shadow">
+                    <div class="flex justify-between items-center border-b pb-3 mb-4">
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-800">Catalog Store</h1>
+                            <p class="text-xs text-gray-500">Purchase rare hats, gears, and faces using Robux (R$) or Tickets (T$).</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <span class="text-xs bg-green-100 text-green-800 font-bold px-2.5 py-1 rounded border border-green-200">Robux Items</span>
+                            <span class="text-xs bg-red-100 text-red-800 font-bold px-2.5 py-1 rounded border border-red-200">Tix Items</span>
+                        </div>
+                    </div>
+
+                    <div id="catalog-store-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-inventory" class="space-y-3 hidden">
+                <div class="bg-white p-4 rounded-sm roblox-card-shadow">
+                    <div class="flex justify-between items-center border-b pb-3 mb-4">
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-800">Live Inventory</h1>
+                            <p class="text-xs text-gray-500">View items you own, check serials/rarity, or select them for trading.</p>
+                        </div>
+                        <button onclick="switchTab('catalog')" class="see-all-btn bg-green-600 hover:bg-green-700">Buy Items</button>
+                    </div>
+
+                    <div id="user-inventory-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-trade" class="space-y-3 hidden">
+                <div class="bg-white p-4 rounded-sm roblox-card-shadow">
+                    <div class="flex justify-between items-center border-b pb-2 mb-3">
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-800">Trading System</h1>
+                            <p class="text-xs text-gray-500">Trade items and currencies with players and famous creators.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <label class="text-xs font-bold text-gray-600">Partner:</label>
+                            <select id="trade-partner-select" onchange="changeTradePartner(this.value)" class="text-xs border border-gray-300 rounded p-1 font-semibold bg-gray-50">
+                                <option value="Builderman">Builderman (NPC)</option>
+                                <option value="Telamon">Telamon (NPC)</option>
+                                <option value="Stickmasterluke">Stickmasterluke (NPC)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Your Offer Panel -->
+                        <div class="border border-gray-300 p-3 rounded bg-gray-50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center border-b pb-2 mb-2">
+                                    <h3 class="font-bold text-sm text-gray-800">Your Offer (<span id="trade-your-name">Guest</span>)</h3>
+                                    <div class="flex items-center gap-2">
+                                        <label class="text-[10px] text-gray-500">Add R$:</label>
+                                        <input type="number" id="trade-offer-robux" min="0" value="0" class="w-16 text-xs p-1 border rounded text-right">
+                                    </div>
+                                </div>
+                                <div id="trade-your-items-slot" class="grid grid-cols-3 gap-2 min-h-[140px] p-2 bg-white border border-dashed rounded">
+                                    <div class="col-span-full flex items-center justify-center text-xs text-gray-400">Click items below to add to trade</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3 pt-2 border-t">
+                                <span class="text-xs font-bold text-gray-600 block mb-1">Select from Inventory:</span>
+                                <div id="trade-inventory-picker" class="flex gap-2 overflow-x-auto pb-1 max-h-24"></div>
+                            </div>
+                        </div>
+
+                        <!-- Partner Offer Panel -->
+                        <div class="border border-gray-300 p-3 rounded bg-gray-50 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center border-b pb-2 mb-2">
+                                    <h3 class="font-bold text-sm text-gray-800"><span id="trade-partner-name">Builderman</span>'s Offer</h3>
+                                    <span class="text-xs font-bold text-green-600" id="trade-partner-robux">+0 R$</span>
+                                </div>
+                                <div id="trade-partner-items-slot" class="grid grid-cols-3 gap-2 min-h-[140px] p-2 bg-white border border-dashed rounded">
+                                    <!-- Partner offered items -->
+                                </div>
+                            </div>
+
+                            <div class="mt-3 pt-2 border-t text-right">
+                                <button onclick="resetTradeOffers()" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-xs font-bold rounded mr-2">Reset</button>
+                                <button onclick="sendTradeOffer()" class="px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white font-bold text-xs rounded shadow transition">Send Trade Offer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-develop" class="space-y-3 hidden">
+                <div class="bg-white p-6 rounded-sm roblox-card-shadow max-w-2xl mx-auto">
+                    <div class="border-b pb-3 mb-4 flex items-center justify-between">
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-800">Develop & Publish HTML Game</h1>
+                            <p class="text-xs text-gray-500">Upload HTML games to publish instantly to global cloud storage.</p>
+                        </div>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">Global Sync</span>
+                    </div>
+
+                    <form id="game-upload-form" onsubmit="handleGamePublish(event)" class="space-y-4 text-xs font-semibold text-gray-700">
+                        <div>
+                            <label class="block mb-1">Game Title</label>
+                            <input type="text" id="upload-title" required placeholder="e.g. Classic Obby 2016" class="w-full p-2 border border-gray-300 rounded font-normal">
+                        </div>
+
+                        <div>
+                            <label class="block mb-1">Description</label>
+                            <textarea id="upload-desc" rows="2" required placeholder="Describe your game..." class="w-full p-2 border border-gray-300 rounded font-normal"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block mb-1">Thumbnail Image URL (Optional)</label>
+                            <input type="url" id="upload-thumb" placeholder="https://placehold.co/300x300/0074bd/ffffff?text=MyGame" class="w-full p-2 border border-gray-300 rounded font-normal">
+                        </div>
+
+                        <div>
+                            <label class="block mb-1">Game HTML Code File (.html)</label>
+                            <input type="file" id="upload-file" accept=".html,.htm" required class="w-full p-1.5 border border-gray-300 rounded bg-gray-50 text-xs">
+                        </div>
+
+                        <div class="bg-blue-50 border border-blue-200 p-3 rounded space-y-2">
+                            <div class="font-bold text-blue-900 flex items-center">
+                                <i class="fa-solid fa-shield-halved mr-1.5"></i> Publisher Verification
+                            </div>
+                            <p class="text-gray-600 text-[11px] font-normal">
+                                Authenticated as: <strong id="publisher-username-display" class="text-blue-700">Guest 0000</strong>
+                            </p>
+                            <div class="flex items-center space-x-2 pt-1">
+                                <input type="checkbox" id="auth-verify-check" required class="rounded border-gray-300 text-blue-600">
+                                <label for="auth-verify-check" class="text-gray-700 font-normal cursor-pointer">I verify this content is safe and functional.</label>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 flex justify-end space-x-2">
+                            <button type="button" onclick="switchTab('home')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded font-bold">Cancel</button>
+                            <button type="submit" class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded font-bold shadow transition flex items-center">
+                                <i class="fa-solid fa-cloud-arrow-up mr-1.5"></i> Publish Globally
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section id="page-buildersclub" class="space-y-3 hidden">
+                <div class="bg-white p-6 rounded-sm roblox-card-shadow text-center">
+                    <h1 class="text-2xl font-black text-gray-800 uppercase tracking-tight">Upgrade to Builders Club</h1>
+                    <p class="text-xs text-gray-600 mt-1">Get daily Robux & Tix allowance and full trading privileges!</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                        <div class="border-2 border-amber-600 p-4 rounded bg-amber-50/20 flex flex-col justify-between roblox-card-shadow">
+                            <div>
+                                <i class="fa-solid fa-shield text-4xl text-amber-600 mb-2"></i>
+                                <h2 class="font-black text-lg text-amber-700">Builders Club</h2>
+                                <p class="text-xl font-bold my-2 text-gray-800">$5.95 / mo</p>
+                                <ul class="text-xs text-gray-600 space-y-1 text-left my-3 border-t pt-2">
+                                    <li>• <strong>15 R$</strong> Daily Bonus</li>
+                                    <li>• <strong>50 T$</strong> Daily Bonus</li>
+                                    <li>• Full Item Trading</li>
+                                </ul>
+                            </div>
+                            <button onclick="subscribeBC('Classic Builders Club', 15, 50)" class="mt-3 w-full py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded shadow">Upgrade BC</button>
+                        </div>
+
+                        <div class="border-2 border-red-600 p-4 rounded bg-red-50/20 flex flex-col justify-between roblox-card-shadow">
+                            <div>
+                                <i class="fa-solid fa-shield-halved text-4xl text-red-600 mb-2"></i>
+                                <h2 class="font-black text-lg text-red-700">Turbo BC</h2>
+                                <p class="text-xl font-bold my-2 text-gray-800">$11.95 / mo</p>
+                                <ul class="text-xs text-gray-600 space-y-1 text-left my-3 border-t pt-2">
+                                    <li>• <strong>35 R$</strong> Daily Bonus</li>
+                                    <li>• <strong>100 T$</strong> Daily Bonus</li>
+                                    <li>• Exclusive Turbo Hat</li>
+                                </ul>
+                            </div>
+                            <button onclick="subscribeBC('Turbo Builders Club', 35, 100)" class="mt-3 w-full py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded shadow">Upgrade TBC</button>
+                        </div>
+
+                        <div class="border-2 border-blue-600 p-4 rounded bg-blue-50/20 flex flex-col justify-between roblox-card-shadow">
+                            <div>
+                                <i class="fa-solid fa-crown text-4xl text-blue-600 mb-2"></i>
+                                <h2 class="font-black text-lg text-blue-700">Outrageous BC</h2>
+                                <p class="text-xl font-bold my-2 text-gray-800">$19.95 / mo</p>
+                                <ul class="text-xs text-gray-600 space-y-1 text-left my-3 border-t pt-2">
+                                    <li>• <strong>60 R$</strong> Daily Bonus</li>
+                                    <li>• <strong>250 T$</strong> Daily Bonus</li>
+                                    <li>• 100 Group Slot Limit</li>
+                                </ul>
+                            </div>
+                            <button onclick="subscribeBC('Outrageous Builders Club', 60, 250)" class="mt-3 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded shadow">Upgrade OBC</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-profile" class="space-y-3 hidden">
+                <div class="bg-white p-4 rounded-sm roblox-card-shadow">
+                    <div class="flex items-center space-x-4 border-b pb-4">
+                        <div class="w-16 h-16 rounded-full bg-gray-200 border-2 border-gray-300 flex items-center justify-center text-2xl text-gray-600">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <h1 id="profile-page-name" class="text-2xl font-bold text-gray-800">Guest 0000</h1>
+                            <p class="text-xs text-gray-500">Verified Guest Account • Joined 2016</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-xs text-gray-600 space-y-2">
+                        <div class="font-bold text-gray-800">About Me</div>
+                        <p class="bg-gray-50 p-2 rounded border">Welcome to my Fedora Revival profile! Playing games, trading items, and creating HTML experiences.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-groups" class="space-y-3 hidden">
+                <div class="bg-white p-4 rounded-sm roblox-card-shadow">
+                    <h1 class="text-xl font-bold text-gray-800 border-b pb-2 mb-3">Groups</h1>
+                    <div class="border p-3 rounded flex items-center space-x-3 bg-gray-50">
+                        <div class="w-12 h-12 bg-blue-600 text-white font-bold flex items-center justify-center rounded">FDR</div>
+                        <div>
+                            <div class="font-bold text-sm text-gray-800">Fedora Classic Fan Club</div>
+                            <div class="text-xs text-gray-500">12,450 Members</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="bg-white border-t border-gray-300 py-4 text-center text-xs text-gray-500 mt-auto">
+        <div class="max-w-[1170px] mx-auto px-2 space-y-1">
+            <div class="flex justify-center space-x-3 text-blue-600 font-semibold">
+                <a href="#" class="hover:underline">About Fedora</a>
+                <span>|</span>
+                <a href="#" class="hover:underline">Terms & Privacy</a>
+                <span>|</span>
+                <a href="#" class="hover:underline">Support</a>
+            </div>
+            <p>© 2026 Fedora Corporation. Classic Roblox Revival Project with Live Inventory & Global Sync.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'fedora-roblox-revival-2016';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyMockKeyForFedoraRevival",
+            authDomain: "fedora-revival.firebaseapp.com",
+            projectId: "fedora-revival"
+        };
+
+        let app, db, auth;
+        let currentUser = null;
+        let communityGamesList = [];
+
+        // Store Catalog Database
+        const catalogItems = [
+            { id: 'item_1', name: 'Dominus Frigidus', icon: '❄️', price: 10000, currency: 'robux', rarity: 'Limited', desc: 'The frostiest cowl in existence.' },
+            { id: 'item_2', name: "Clockwork's Shades", icon: '🕶️', price: 2500, currency: 'robux', rarity: 'Rare', desc: 'Classic vintage luxury sunglasses.' },
+            { id: 'item_3', name: 'Valkyrie Helm', icon: '🪖', price: 1500, currency: 'robux', rarity: 'Rare', desc: 'Worn by honorable warriors.' },
+            { id: 'item_4', name: 'Domino Crown', icon: '👑', price: 5000, currency: 'robux', rarity: 'Limited', desc: 'The king of classic headwear.' },
+            { id: 'item_5', name: 'Classic Red Fedora', icon: '🎩', price: 500, currency: 'tix', rarity: 'Common', desc: 'Stylish red felt classic fedora.' },
+            { id: 'item_6', name: 'Skeleton Suit', icon: '💀', price: 200, currency: 'tix', rarity: 'Common', desc: 'Spooky classic Halloween costume.' },
+            { id: 'item_7', name: 'Sparkle Time Fedora', icon: '✨', price: 12000, currency: 'robux', rarity: 'Limited', desc: 'Gleams with infinite sparkles.' },
+            { id: 'item_8', name: 'Red Visor', icon: '🕶️', price: 100, currency: 'tix', rarity: 'Common', desc: 'Classic 2007 visor accessory.' }
+        ];
+
+        // Default Inventory for User
+        let userInventory = [
+            { id: 'item_5', name: 'Classic Red Fedora', icon: '🎩', rarity: 'Common', equipped: true },
+            { id: 'item_8', name: 'Red Visor', icon: '🕶️', rarity: 'Common', equipped: false }
+        ];
+
+        // NPC Inventories for Trading
+        const npcInventories = {
+            Builderman: [
+                { id: 'item_1', name: 'Dominus Frigidus', icon: '❄️', rarity: 'Limited' },
+                { id: 'item_4', name: 'Domino Crown', icon: '👑', rarity: 'Limited' }
+            ],
+            Telamon: [
+                { id: 'item_7', name: 'Sparkle Time Fedora', icon: '✨', rarity: 'Limited' },
+                { id: 'item_2', name: "Clockwork's Shades", icon: '🕶️', rarity: 'Rare' }
+            ],
+            Stickmasterluke: [
+                { id: 'item_3', name: 'Valkyrie Helm', icon: '🪖', rarity: 'Rare' },
+                { id: 'item_6', name: 'Skeleton Suit', icon: '💀', rarity: 'Common' }
+            ]
+        };
+
+        // Embedded Neocities Games
+        const defaultNeocitiesGames = [
+            { title: "Classic Experience 1", creator: "folklore1", url: "https://folklore1.neocities.org/game1", thumb: "https://placehold.co/300x300/0074bd/ffffff?text=Game+1", playing: "354", rating: "92%" },
+            { title: "Classic Experience 3", creator: "folklore1", url: "https://folklore1.neocities.org/game3", thumb: "https://placehold.co/300x300/e67e22/ffffff?text=Game+3", playing: "812", rating: "97%" },
+            { title: "Classic Experience 5", creator: "folklore1", url: "https://folklore1.neocities.org/game5", thumb: "https://placehold.co/300x300/2ecc71/ffffff?text=Game+5", playing: "1,140", rating: "95%" },
+            { title: "B00BLOX Experience", creator: "b00blox", url: "https://b00blox.neocities.org/1", thumb: "https://placehold.co/300x300/9b59b6/ffffff?text=B00BLOX", playing: "520", rating: "94%" }
+        ];
+
+        // Active Trade State
+        let activeTrade = {
+            partner: 'Builderman',
+            yourItems: [],
+            partnerItems: []
+        };
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            const randomGuestNum = Math.floor(1000 + Math.random() * 9000);
+            const guestName = `Guest ${randomGuestNum}`;
+
+            document.getElementById('header-username').innerText = guestName;
+            document.getElementById('sidebar-username').innerText = guestName;
+            document.getElementById('home-greeting-username').innerText = guestName;
+            document.getElementById('profile-page-name').innerText = guestName;
+            document.getElementById('trade-your-name').innerText = guestName;
+            document.getElementById('publisher-username-display').innerText = guestName;
+
+            renderCatalogStore();
+            renderUserInventory();
+            renderTradeSystem();
+
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                currentUser = auth.currentUser;
+                document.getElementById('firebase-status').className = 'w-2 h-2 rounded-full bg-green-500';
+
+                const gamesColRef = collection(db, 'artifacts', appId, 'public', 'data', 'community_games');
+                onSnapshot(gamesColRef, (snapshot) => {
+                    communityGamesList = [];
+                    snapshot.forEach(docSnap => communityGamesList.push({ id: docSnap.id, ...docSnap.data() }));
+                    renderAllGrids();
+                }, (error) => {
+                    console.error("Firestore sync error:", error);
+                    renderAllGrids();
+                });
+
+            } catch (err) {
+                console.warn("Offline fallback mode:", err);
+                renderAllGrids();
+            }
+
+            showToast("Welcome to Fedora!", `Logged in as ${guestName}. Explore games, store, & trading!`, "info");
+        });
+
+        window.showToast = function(title, message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `pointer-events-auto bg-white border-l-4 p-3 rounded roblox-card-shadow text-xs toast-enter ${
+                type === 'success' ? 'border-green-500' : type === 'error' ? 'border-red-500' : 'border-blue-500'
+            }`;
+
+            toast.innerHTML = `
+                <div class="flex items-start justify-between gap-2">
+                    <div>
+                        <div class="font-bold text-gray-800">${title}</div>
+                        <div class="text-gray-600 text-[11px] mt-0.5">${message}</div>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-600 font-bold">&times;</button>
+                </div>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        };
+
+        function renderCatalogStore() {
+            const grid = document.getElementById('catalog-store-grid');
+            if (!grid) return;
+
+            grid.innerHTML = catalogItems.map(item => {
+                const isRobux = item.currency === 'robux';
+                return `
+                    <div class="border border-gray-200 p-3 rounded text-center bg-white roblox-card-shadow flex flex-col justify-between">
+                        <div>
+                            <div class="text-4xl my-2">${item.icon}</div>
+                            <div class="font-bold text-xs text-gray-800">${item.name}</div>
+                            <div class="text-[10px] text-gray-400 mt-0.5">${item.desc}</div>
+                        </div>
+                        <div class="mt-3 pt-2 border-t">
+                            <div class="text-xs font-bold ${isRobux ? 'text-green-600' : 'text-red-500'} mb-2 flex items-center justify-center gap-1">
+                                ${isRobux ? '<div class="icon-robux">R</div>' : '<div class="icon-tix"><span>T</span></div>'}
+                                <span>${item.price.toLocaleString()}</span>
+                            </div>
+                            <button onclick="buyStoreItem('${item.id}')" class="w-full py-1 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded transition shadow">
+                                Buy Item
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.buyStoreItem = function(itemId) {
+            const item = catalogItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            const robuxEl = document.getElementById('user-robux');
+            const tixEl = document.getElementById('user-tix');
+            let currentRobux = parseInt(robuxEl.innerText.replace(/,/g, ''));
+            let currentTix = parseInt(tixEl.innerText.replace(/,/g, ''));
+
+            if (item.currency === 'robux') {
+                if (currentRobux < item.price) {
+                    showToast("Purchase Failed", "Insufficient Robux balance!", "error");
+                    return;
+                }
+                currentRobux -= item.price;
+                robuxEl.innerText = currentRobux.toLocaleString();
+            } else {
+                if (currentTix < item.price) {
+                    showToast("Purchase Failed", "Insufficient Tickets (Tix) balance!", "error");
+                    return;
+                }
+                currentTix -= item.price;
+                tixEl.innerText = currentTix.toLocaleString();
+            }
+
+            userInventory.push({ ...item, equipped: false });
+            renderUserInventory();
+            renderTradeSystem();
+            showToast("Item Purchased!", `You bought ${item.name}! Added to live inventory.`, "success");
+        };
+
+        function renderUserInventory() {
+            const grid = document.getElementById('user-inventory-grid');
+            if (!grid) return;
+
+            if (userInventory.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-6 text-center text-xs text-gray-400">Your inventory is empty. Visit the Catalog Store to buy items!</div>`;
+                return;
+            }
+
+            grid.innerHTML = userInventory.map((item, index) => `
+                <div class="border border-gray-200 p-3 rounded text-center bg-gray-50 roblox-card-shadow relative">
+                    ${item.equipped ? '<span class="absolute top-1 right-1 bg-green-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">Equipped</span>' : ''}
+                    <div class="text-3xl my-1">${item.icon}</div>
+                    <div class="font-bold text-xs text-gray-800 truncate">${item.name}</div>
+                    <div class="text-[10px] text-gray-400 font-semibold">${item.rarity || 'Common'}</div>
+                    <button onclick="toggleEquipItem(${index})" class="mt-2 text-[10px] font-bold px-2 py-0.5 rounded ${item.equipped ? 'bg-gray-300 text-gray-700' : 'bg-blue-600 text-white hover:bg-blue-700'} transition">
+                        ${item.equipped ? 'Unequip' : 'Equip Hat'}
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        window.toggleEquipItem = function(index) {
+            userInventory[index].equipped = !userInventory[index].equipped;
+            renderUserInventory();
+            showToast("Avatar Updated", `${userInventory[index].equipped ? 'Equipped' : 'Unequipped'} ${userInventory[index].name}.`, "info");
+        };
+
+        window.changeTradePartner = function(partnerName) {
+            activeTrade.partner = partnerName;
+            activeTrade.yourItems = [];
+            activeTrade.partnerItems = [];
+            document.getElementById('trade-partner-name').innerText = partnerName;
+            renderTradeSystem();
+            showToast("Trade Partner Changed", `Now trading with ${partnerName}.`, "info");
+        };
+
+        window.openTradeWithNPC = function(npcName) {
+            switchTab('trade');
+            const select = document.getElementById('trade-partner-select');
+            if (select) {
+                select.value = npcName;
+                changeTradePartner(npcName);
+            }
+        };
+
+        function renderTradeSystem() {
+            const picker = document.getElementById('trade-inventory-picker');
+            const yourSlot = document.getElementById('trade-your-items-slot');
+            const partnerSlot = document.getElementById('trade-partner-items-slot');
+
+            // Render Inventory Picker for Your Offer
+            if (picker) {
+                picker.innerHTML = userInventory.map((item, idx) => `
+                    <button onclick="addYourTradeItem(${idx})" class="flex-shrink-0 bg-white border p-1.5 rounded text-center w-16 hover:border-blue-500 transition">
+                        <div class="text-xl">${item.icon}</div>
+                        <div class="text-[9px] font-bold truncate text-gray-700">${item.name}</div>
+                    </button>
+                `).join('');
+            }
+
+            // Render Your Offered Items
+            if (yourSlot) {
+                if (activeTrade.yourItems.length === 0) {
+                    yourSlot.innerHTML = `<div class="col-span-full flex items-center justify-center text-xs text-gray-400">Click items below to add to trade</div>`;
+                } else {
+                    yourSlot.innerHTML = activeTrade.yourItems.map((item, idx) => `
+                        <div class="bg-blue-50 border border-blue-300 p-1.5 rounded text-center relative cursor-pointer" onclick="removeYourTradeItem(${idx})">
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white w-3.5 h-3.5 rounded-full text-[9px] flex items-center justify-center font-bold">&times;</span>
+                            <div class="text-2xl">${item.icon}</div>
+                            <div class="text-[10px] font-bold truncate text-gray-800">${item.name}</div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            // Render Partner Offered Items (NPC items)
+            if (partnerSlot) {
+                const partnerList = npcInventories[activeTrade.partner] || [];
+                if (partnerList.length === 0) {
+                    partnerSlot.innerHTML = `<div class="col-span-full flex items-center justify-center text-xs text-gray-400">Partner has offered no items</div>`;
+                } else {
+                    partnerSlot.innerHTML = partnerList.map(item => `
+                        <div class="bg-amber-50 border border-amber-300 p-1.5 rounded text-center">
+                            <div class="text-2xl">${item.icon}</div>
+                            <div class="text-[10px] font-bold truncate text-gray-800">${item.name}</div>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        window.addYourTradeItem = function(idx) {
+            const item = userInventory[idx];
+            if (item && !activeTrade.yourItems.includes(item)) {
+                activeTrade.yourItems.push(item);
+                renderTradeSystem();
+            }
+        };
+
+        window.removeYourTradeItem = function(idx) {
+            activeTrade.yourItems.splice(idx, 1);
+            renderTradeSystem();
+        };
+
+        window.resetTradeOffers = function() {
+            activeTrade.yourItems = [];
+            document.getElementById('trade-offer-robux').value = 0;
+            renderTradeSystem();
+        };
+
+        window.sendTradeOffer = function() {
+            const partnerName = activeTrade.partner;
+            const offerRobux = parseInt(document.getElementById('trade-offer-robux').value) || 0;
+            const partnerItems = npcInventories[partnerName] || [];
+
+            if (activeTrade.yourItems.length === 0 && offerRobux === 0) {
+                showToast("Invalid Trade", "Please offer at least one item or Robux amount.", "error");
+                return;
+            }
+
+            // Deduct Robux if offered
+            const robuxEl = document.getElementById('user-robux');
+            let currentRobux = parseInt(robuxEl.innerText.replace(/,/g, ''));
+            if (offerRobux > currentRobux) {
+                showToast("Trade Failed", "You don't have enough Robux to cover this offer.", "error");
+                return;
+            }
+
+            currentRobux -= offerRobux;
+            robuxEl.innerText = currentRobux.toLocaleString();
+
+            // Transfer items: remove offered from user, add received partner items
+            userInventory = userInventory.filter(item => !activeTrade.yourItems.includes(item));
+            partnerItems.forEach(pItem => userInventory.push({ ...pItem, equipped: false }));
+
+            // Reset partner inventory slot with new random item
+            npcInventories[partnerName] = [{ id: 'item_4', name: 'Domino Crown', icon: '👑', rarity: 'Limited' }];
+
+            resetTradeOffers();
+            renderUserInventory();
+            renderTradeSystem();
+
+            showToast("Trade Accepted!", `${partnerName} accepted your trade! Received new item(s).`, "success");
+        };
+
+        window.handleGamePublish = async function(event) {
+            event.preventDefault();
+
+            if (!currentUser) {
+                showToast("Authentication Error", "Waiting for anonymous authentication...", "error");
+                return;
+            }
+
+            const title = document.getElementById('upload-title').value.trim();
+            const desc = document.getElementById('upload-desc').value.trim();
+            let thumb = document.getElementById('upload-thumb').value.trim();
+            const fileInput = document.getElementById('upload-file');
+
+            if (!thumb) thumb = `https://placehold.co/300x300/0074bd/ffffff?text=${encodeURIComponent(title)}`;
+            if (fileInput.files.length === 0) return;
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = async function(e) {
+                const htmlContent = e.target.result;
+                const publisherName = document.getElementById('header-username').innerText;
+
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const gameBlobUrl = URL.createObjectURL(blob);
+
+                const newGameData = {
+                    title: title,
+                    description: desc,
+                    creator: publisherName,
+                    url: gameBlobUrl,
+                    thumb: thumb,
+                    playing: Math.floor(10 + Math.random() * 150).toString(),
+                    rating: "98%",
+                    createdAt: Date.now()
+                };
+
+                try {
+                    const gamesColRef = collection(db, 'artifacts', appId, 'public', 'data', 'community_games');
+                    await addDoc(gamesColRef, newGameData);
+                    showToast("Game Published!", `"${title}" was uploaded to global cloud storage!`, "success");
+                    document.getElementById('game-upload-form').reset();
+                    switchTab('home');
+                } catch (err) {
+                    console.error("Publishing error:", err);
+                    communityGamesList.push(newGameData);
+                    renderAllGrids();
+                    showToast("Game Published (Session)", `Published "${title}" locally.`, "info");
+                    switchTab('home');
+                }
+            };
+
+            reader.readAsText(file);
+        };
+
+        function renderAllGrids() {
+            const recentGrid = document.getElementById('recently-played-grid');
+            const communityGrid = document.getElementById('community-games-grid');
+            const featuredGamesGrid = document.getElementById('featured-games-grid');
+            const allCommunityGrid = document.getElementById('all-community-grid');
+
+            const neocitiesHtml = defaultNeocitiesGames.map(game => `
+                <a href="${game.url}" target="_blank" class="block bg-white border border-gray-200 rounded-sm overflow-hidden hover:shadow-md transition group">
+                    <div class="h-28 bg-gray-100 overflow-hidden relative">
+                        <img src="${game.thumb}" alt="${game.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-150">
+                    </div>
+                    <div class="p-1.5">
+                        <div class="font-bold text-xs text-gray-800 truncate group-hover:text-blue-600">${game.title}</div>
+                        <div class="text-[10px] text-gray-400">By ${game.creator}</div>
+                        <div class="flex items-center justify-between text-[10px] text-gray-500 mt-1">
+                            <span class="text-green-600 font-semibold"><i class="fa-solid fa-thumbs-up"></i> ${game.rating}</span>
+                            <span><i class="fa-solid fa-user text-gray-400"></i> ${game.playing}</span>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+
+            let communityHtml = '';
+            if (communityGamesList.length === 0) {
+                communityHtml = `<div class="col-span-full py-6 text-center text-xs text-gray-500 bg-gray-50 rounded border">No community games uploaded yet. Be the first to publish one in Develop!</div>`;
+            } else {
+                communityHtml = communityGamesList.map(game => `
+                    <a href="${game.url}" target="_blank" class="block bg-white border border-gray-200 rounded-sm overflow-hidden hover:shadow-md transition group">
+                        <div class="h-28 bg-gray-100 overflow-hidden relative">
+                            <img src="${game.thumb}" alt="${game.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-150">
+                        </div>
+                        <div class="p-1.5">
+                            <div class="font-bold text-xs text-gray-800 truncate group-hover:text-blue-600">${game.title}</div>
+                            <div class="text-[10px] text-gray-400">By ${game.creator}</div>
+                            <div class="flex items-center justify-between text-[10px] text-gray-500 mt-1">
+                                <span class="text-green-600 font-semibold"><i class="fa-solid fa-thumbs-up"></i> ${game.rating}</span>
+                                <span><i class="fa-solid fa-user text-gray-400"></i> ${game.playing}</span>
+                            </div>
+                        </div>
+                    </a>
+                `).join('');
+            }
+
+            if (recentGrid) recentGrid.innerHTML = neocitiesHtml;
+            if (communityGrid) communityGrid.innerHTML = communityHtml;
+            if (featuredGamesGrid) featuredGamesGrid.innerHTML = neocitiesHtml;
+            if (allCommunityGrid) allCommunityGrid.innerHTML = communityHtml;
+        }
+
+        window.switchTab = function(tabName) {
+            const tabs = ['home', 'games', 'trade', 'buildersclub', 'catalog', 'profile', 'inventory', 'groups', 'develop'];
+            tabs.forEach(tab => {
+                const page = document.getElementById(`page-${tab}`);
+                const sidebarItem = document.getElementById(`sb-${tab}`);
+                
+                if (page) {
+                    if (tab === tabName) page.classList.remove('hidden');
+                    else page.classList.add('hidden');
+                }
+                if (sidebarItem) {
+                    if (tab === tabName) sidebarItem.classList.add('active');
+                    else sidebarItem.classList.remove('active');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.claimDailyTix = function() {
+            const tixEl = document.getElementById('user-tix');
+            let currentTix = parseInt(tixEl.innerText.replace(/,/g, '')) + 250;
+            tixEl.innerText = currentTix.toLocaleString();
+            showToast("Allowance Claimed!", "Added +250 Tickets (Tix) to your account!", "success");
+        };
+
+        window.subscribeBC = function(plan, bonusRobux, bonusTix) {
+            const robuxEl = document.getElementById('user-robux');
+            const tixEl = document.getElementById('user-tix');
+            let r = parseInt(robuxEl.innerText.replace(/,/g, '')) + bonusRobux;
+            let t = parseInt(tixEl.innerText.replace(/,/g, '')) + bonusTix;
+            robuxEl.innerText = r.toLocaleString();
+            tixEl.innerText = t.toLocaleString();
+            showToast("Subscribed!", `Joined ${plan}! Received +${bonusRobux} R$ and +${bonusTix} T$ daily bonus.`, "success");
+        };
+
+        window.showModal = function(title, message) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('custom-modal').style.display = 'flex';
+        };
+
+        window.closeModal = function() {
+            document.getElementById('custom-modal').style.display = 'none';
+        };
+    </script>
+</body>
+</html>

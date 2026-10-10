@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEDORA - Sign Up and Start Having Fun!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            background-color: #5bbde8;
+        }
+
+        /* Fixed Background Container */
+        .bg-container {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 2016 Authentic Green Button Gradient & States */
+        .btn-green {
+            background: linear-gradient(180deg, #02b757 0%, #008f44 100%);
+            color: #ffffff;
+            border: 1px solid #007738;
+            border-radius: 3px;
+            font-weight: 700;
+            cursor: pointer;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+            transition: all 0.1s linear;
+        }
+
+        .btn-green:hover {
+            background: linear-gradient(180deg, #02c85f 0%, #00a34d 100%);
+        }
+
+        .btn-green:active {
+            background: #007738;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Input Controls */
+        .input-box {
+            border: 1px solid #c3c3c3;
+            border-radius: 3px;
+            color: #333333;
+            background-color: #fcfcfc;
+            font-size: 14px;
+            height: 38px;
+            padding: 0 10px;
+            width: 100%;
+            outline: none;
+            transition: border 0.15s, background 0.15s;
+        }
+
+        .input-box::placeholder {
+            color: #aaaaaa;
+            font-weight: 400;
+        }
+
+        .input-box:focus {
+            border-color: #00a2ff;
+            background-color: #ffffff;
+            box-shadow: 0 0 4px rgba(0, 162, 255, 0.3);
+        }
+
+        .select-box {
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: #fcfcfc;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2210%22%20height%3D%226%22%20viewBox%3D%220%200%2010%206%22%3E%3Cpath%20fill%3D%22%23555555%22%20d%3D%22M0%200l5%206%205-6z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 20px;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            font-size: 13px;
+            color: #4a4a4a;
+        }
+
+        .gender-btn {
+            height: 100%;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            transition: background 0.15s;
+        }
+
+        .gender-btn:hover {
+            background-color: #ececec;
+        }
+
+        .gender-btn.selected {
+            background-color: #dbeeff;
+        }
+
+        /* Logo Banner Slogan Box */
+        .slogan-box {
+            background-color: rgba(18, 18, 18, 0.85);
+            border-radius: 2px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body class="relative w-screen min-h-screen overflow-x-hidden flex flex-col justify-between">
+
+    <!-- Roller Coaster 3D Theme Park Background -->
+    <div class="bg-container">
+        <svg class="w-full h-full object-cover" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <!-- Sky Gradient -->
+                <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#3aa8f0" />
+                    <stop offset="65%" stop-color="#80d0f7" />
+                    <stop offset="100%" stop-color="#bce8fc" />
+                </linearGradient>
+
+                <!-- Track Tubular Metal Gradient -->
+                <linearGradient id="trackGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ff3b3b" />
+                    <stop offset="50%" stop-color="#d91414" />
+                    <stop offset="100%" stop-color="#800202" />
+                </linearGradient>
+
+                <!-- Blocky Terrain Gradient -->
+                <linearGradient id="grassGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#64bd42" />
+                    <stop offset="100%" stop-color="#3c8a21" />
+                </linearGradient>
+            </defs>
+
+            <!-- Sky Surface -->
+            <rect width="1440" height="900" fill="url(#skyGrad)" />
+
+            <!-- Clouds -->
+            <g fill="#ffffff" opacity="0.85">
+                <circle cx="200" cy="180" r="70" />
+                <circle cx="260" cy="150" r="85" />
+                <circle cx="330" cy="180" r="65" />
+                
+                <circle cx="950" cy="120" r="80" />
+                <circle cx="1030" cy="90" r="95" />
+                <circle cx="1110" cy="120" r="75" />
+            </g>
+
+            <!-- Distant Blocky Terrain -->
+            <path d="M0,650 L180,550 L380,620 L620,490 L880,610 L1150,500 L1440,630 L1440,900 L0,900 Z" fill="#4d9e30" />
+            <path d="M0,720 L300,640 L650,750 L1050,620 L1440,710 L1440,900 L0,900 Z" fill="url(#grassGrad)" />
+
+            <!-- Steel Support Towers (Grey Pylons) -->
+            <g stroke="#8e9ba6" stroke-width="7" stroke-linecap="round">
+                <!-- Left Main Pylon -->
+                <line x1="520" y1="200" x2="520" y2="800" />
+                <line x1="520" y1="350" x2="680" y2="800" stroke-width="4" />
+                <line x1="520" y1="450" x2="380" y2="800" stroke-width="4" />
+
+                <!-- Loop Supports -->
+                <line x1="220" y1="420" x2="220" y2="800" />
+                <line x1="320" y1="310" x2="320" y2="800" />
+                <line x1="420" y1="230" x2="420" y2="800" />
+
+                <!-- Right Hill Supports -->
+                <line x1="720" y1="380" x2="720" y2="850" />
+                <line x1="880" y1="520" x2="880" y2="850" />
+
+                <!-- Front Foreground Support (Right Side) -->
+                <line x1="1250" y1="520" x2="1440" y2="900" stroke="#b01212" stroke-width="32" />
+                <line x1="1200" y1="540" x2="950" y2="900" stroke="#b01212" stroke-width="26" />
+            </g>
+
+            <!-- Cross Bracing -->
+            <g stroke="#717e8a" stroke-width="3">
+                <line x1="520" y1="250" x2="470" y2="350" />
+                <line x1="520" y1="350" x2="470" y2="250" />
+                <line x1="520" y1="350" x2="570" y2="450" />
+                <line x1="520" y1="450" x2="570" y2="350" />
+            </g>
+
+            <!-- Back Track Curve -->
+            <path d="M 180,600 C 220,300 350,180 520,200 C 680,220 720,480 850,520 C 1000,560 1200,320 1440,380" 
+                  fill="none" stroke="#700202" stroke-width="22" stroke-linecap="round" />
+            
+            <path d="M 180,600 C 220,300 350,180 520,200 C 680,220 720,480 850,520 C 1000,560 1200,320 1440,380" 
+                  fill="none" stroke="url(#trackGrad)" stroke-width="16" stroke-linecap="round" />
+
+            <!-- Foreground Giant Red Track Loop -->
+            <path d="M -100,580 C 150,220 400,100 520,200 C 650,310 320,800 150,680 C -20,560 250,300 600,480 C 850,600 1100,680 1440,950" 
+                  fill="none" stroke="#900000" stroke-width="34" />
+            
+            <path d="M -100,580 C 150,220 400,100 520,200 C 650,310 320,800 150,680 C -20,560 250,300 600,480 C 850,600 1100,680 1440,950" 
+                  fill="none" stroke="url(#trackGrad)" stroke-width="26" />
+
+            <!-- Yellow Track Highlight Spine -->
+            <path d="M -100,580 C 150,220 400,100 520,200 C 650,310 320,800 150,680 C -20,560 250,300 600,480 C 850,600 1100,680 1440,950" 
+                  fill="none" stroke="#ff8888" stroke-width="4" />
+
+            <!-- Roller Coaster Cart on Track -->
+            <g transform="translate(660, 490) rotate(22)">
+                <rect x="0" y="0" width="48" height="24" rx="4" fill="#00a2ff" stroke="#005599" stroke-width="2" />
+                <rect x="-42" y="2" width="38" height="22" rx="4" fill="#0088cc" stroke="#004477" stroke-width="2" />
+                <rect x="-80" y="4" width="35" height="20" rx="4" fill="#0066aa" stroke="#003366" stroke-width="2" />
+                <circle cx="10" cy="25" r="5" fill="#111111" />
+                <circle cx="38" cy="25" r="5" fill="#111111" />
+                <circle cx="-32" cy="25" r="5" fill="#111111" />
+                <circle cx="-10" cy="25" r="5" fill="#111111" />
+                <circle cx="15" cy="-4" r="6" fill="#ffcc00" />
+                <circle cx="32" cy="-4" r="6" fill="#ffcc00" />
+                <circle cx="-28" cy="-2" r="6" fill="#ffcc00" />
+            </g>
+        </svg>
+    </div>
+
+    <!-- Top Right Header Button -->
+    <header class="relative z-20 w-full flex justify-end p-4 sm:p-5">
+        <button 
+            type="button" 
+            onclick="goRedirect(event)" 
+            class="btn-green px-5 py-1.5 text-xs sm:text-sm tracking-wide"
+        >
+            Log In
+        </button>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="relative z-10 w-full flex-1 flex flex-col md:flex-row items-center justify-between px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto py-4 sm:py-8">
+        
+        <!-- LEFT SIDE: FEDORA LOGO & SLOGAN -->
+        <div class="flex flex-col items-center md:items-start select-none w-full max-w-[480px] mb-8 md:mb-0">
+            
+            <!-- Custom Blocky Red/White FEDORA Logo SVG -->
+            <div class="w-full mb-2 cursor-pointer" onclick="goRedirect(event)">
+                <svg viewBox="0 0 540 150" class="w-full h-auto filter drop-shadow-[0_6px_10px_rgba(0,0,0,0.5)]" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Red Outer Border Gradient -->
+                        <linearGradient id="fedoraRedBorder" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#FF1E1E" />
+                            <stop offset="60%" stop-color="#D60000" />
+                            <stop offset="100%" stop-color="#8B0000" />
+                        </linearGradient>
+
+                        <!-- White Letter Interior Fill Gradient -->
+                        <linearGradient id="fedoraWhiteFill" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#FFFFFF" />
+                            <stop offset="100%" stop-color="#EDEDED" />
+                        </linearGradient>
+                    </defs>
+
+                    <g transform="translate(15, 10)">
+                        <!-- Thick Outer Red Stroke -->
+                        <text x="255" y="110" 
+                              text-anchor="middle" 
+                              font-family="'Arial Black', 'Impact', sans-serif" 
+                              font-weight="900" 
+                              font-size="108" 
+                              letter-spacing="-1.5"
+                              fill="url(#fedoraWhiteFill)" 
+                              stroke="url(#fedoraRedBorder)" 
+                              stroke-width="26" 
+                              stroke-linejoin="miter" 
+                              stroke-miterlimit="3">
+                            FEDORA
+                        </text>
+
+                        <!-- Classic Top E Accent Bar -->
+                        <rect x="142" y="16" width="48" height="12" fill="url(#fedoraWhiteFill)" stroke="url(#fedoraRedBorder)" stroke-width="6" rx="1" />
+
+                        <!-- Sharp White Inner Text Overlay -->
+                        <text x="255" y="110" 
+                              text-anchor="middle" 
+                              font-family="'Arial Black', 'Impact', sans-serif" 
+                              font-weight="900" 
+                              font-size="108" 
+                              letter-spacing="-1.5"
+                              fill="url(#fedoraWhiteFill)" 
+                              stroke="#FFFFFF" 
+                              stroke-width="2" 
+                              stroke-linejoin="round">
+                            FEDORA
+                        </text>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- Dark Banner Slogan: Powering Imagination™ -->
+            <div class="slogan-box px-6 py-2.5 md:ml-3">
+                <span class="text-white text-xl sm:text-2xl font-semibold tracking-wide font-sans">
+                    Powering Imagination<span class="text-xs align-super font-normal ml-0.5">™</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: SIGN UP BOX CARD -->
+        <div class="bg-white w-full max-w-[380px] p-6 rounded-[3px] shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
+            <h2 class="text-center font-bold text-[#4a4a4a] text-base sm:text-[17px] tracking-wide mb-4 uppercase">
+                SIGN UP AND START HAVING FUN!
+            </h2>
+
+            <form onsubmit="goRedirect(event)" class="space-y-3.5">
+                
+                <!-- Birthday Selector -->
+                <div class="grid grid-cols-12 border border-[#b8b8b8] rounded-[3px] overflow-hidden h-[38px] bg-[#fbfbfb]">
+                    <div class="col-span-3 bg-[#f2f2f2] border-r border-[#b8b8b8] flex items-center px-2 text-xs font-semibold text-[#555]">
+                        Birthday
+                    </div>
+                    <div class="col-span-3 border-r border-[#b8b8b8]">
+                        <select required class="select-box px-1">
+                            <option value="" disabled selected>Month</option>
+                            <option>Jan</option><option>Feb</option><option>Mar</option>
+                            <option>Apr</option><option>May</option><option>Jun</option>
+                            <option>Jul</option><option>Aug</option><option>Sep</option>
+                            <option>Oct</option><option>Nov</option><option>Dec</option>
+                        </select>
+                    </div>
+                    <div class="col-span-3 border-r border-[#b8b8b8]">
+                        <select required class="select-box px-1">
+                            <option value="" disabled selected>Day</option>
+                            <option>01</option><option>05</option><option>10</option>
+                            <option>15</option><option>20</option><option>25</option><option>30</option>
+                        </select>
+                    </div>
+                    <div class="col-span-3">
+                        <select required class="select-box px-1">
+                            <option value="" disabled selected>Year</option>
+                            <option>2016</option><option>2012</option><option>2008</option>
+                            <option>2004</option><option>2000</option><option>1995</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Username Input -->
+                <div>
+                    <input 
+                        type="text" 
+                        required
+                        placeholder="Don't use your real name" 
+                        class="input-box"
+                    >
+                </div>
+
+                <!-- Password Input -->
+                <div>
+                    <input 
+                        type="password" 
+                        required
+                        placeholder="At least 8 characters" 
+                        class="input-box"
+                    >
+                </div>
+
+                <!-- Gender Selector -->
+                <div class="grid grid-cols-12 border border-[#b8b8b8] rounded-[3px] overflow-hidden h-[38px] bg-[#fbfbfb]">
+                    <div class="col-span-3 bg-[#f2f2f2] border-r border-[#b8b8b8] flex items-center px-2 text-xs font-semibold text-[#555]">
+                        Gender
+                    </div>
+                    <div class="col-span-9 flex items-center bg-white">
+                        <button type="button" onclick="selectGender(this)" class="gender-btn border-r border-[#b8b8b8]">
+                            <!-- Male Icon -->
+                            <svg class="w-5 h-5 stroke-[#666] fill-none" viewBox="0 0 24 24" stroke-width="1.8">
+                                <circle cx="12" cy="7" r="4" />
+                                <path d="M5.5 21v-2a4 4 0 0 1 4-4h5a4 4 0 0 1 4 4v2" />
+                            </svg>
+                        </button>
+                        <button type="button" onclick="selectGender(this)" class="gender-btn">
+                            <!-- Female Icon -->
+                            <svg class="w-5 h-5 stroke-[#666] fill-none" viewBox="0 0 24 24" stroke-width="1.8">
+                                <circle cx="12" cy="7" r="4" />
+                                <path d="M5.5 21v-2a4 4 0 0 1 4-4h5a4 4 0 0 1 4 4v2" />
+                                <path d="M12 11v3" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Terms Text -->
+                <div class="pt-1 text-[11px] leading-snug text-[#666666]">
+                    By clicking Sign Up, you are agreeing to the 
+                    <a href="https://fedora2016.edgeone.dev" target="_blank" rel="noopener noreferrer" class="text-[#00a2ff] underline hover:text-[#0077c8]">Terms of Use</a> 
+                    including the arbitration clause and you are acknowledging the 
+                    <a href="https://fedora2016.edgeone.dev" target="_blank" rel="noopener noreferrer" class="text-[#00a2ff] underline hover:text-[#0077c8]">Privacy Policy</a>.
+                </div>
+
+                <!-- Submit Sign Up Button -->
+                <div class="pt-2">
+                    <button type="submit" class="btn-green w-full py-2.5 text-base tracking-wide">
+                        Sign Up
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </main>
+
+    <div class="relative z-10 py-2"></div>
+
+    <script>
+        // Redirect directly at top window level or open external tab
+        function goRedirect(e) {
+            if (e) e.preventDefault();
+            const targetUrl = "https://fedora2016.edgeone.dev";
+            
+            try {
+                // Break out of any embedded preview frames
+                if (window.top && window.top !== window) {
+                    window.top.location.href = targetUrl;
+                } else {
+                    window.location.href = targetUrl;
+                }
+            } catch (err) {
+                // Fallback to opening in a fresh new tab if frame navigation is blocked by browser policy
+                window.open(targetUrl, '_blank');
+            }
+        }
+
+        // Gender button toggle logic
+        function selectGender(btn) {
+            const btns = btn.parentElement.querySelectorAll('.gender-btn');
+            btns.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+    </script>
+</body>
+</html>
